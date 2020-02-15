@@ -5,23 +5,32 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    private AudioSource music;
     private Scene currentScene;
 
     void Start()
     {
-        music = FindObjectOfType<AudioSource>();
         currentScene = SceneManager.GetActiveScene();
         
         if (currentScene.buildIndex == 0)
         {
-            StartCoroutine(SplashToStartTransition());
+            float splashTransitionTime = FindObjectOfType<AudioSource>().clip.length + 0.25f;
+            StartCoroutine(SceneTransition(splashTransitionTime));
         }
     }
 
-    IEnumerator SplashToStartTransition()
+    IEnumerator SceneTransition(float timeToWait)
     {
-        yield return new WaitForSeconds(music.clip.length + 0.5f);
+        yield return new WaitForSeconds(timeToWait);
         SceneManager.LoadScene(1);
+    }
+
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene(currentScene.buildIndex + 1);
+    }
+
+    public void LoadNextScene(float timeToWait)
+    {
+        StartCoroutine(SceneTransition(timeToWait));
     }
 }
