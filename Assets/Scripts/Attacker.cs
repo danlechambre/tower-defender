@@ -8,6 +8,7 @@ public class Attacker : MonoBehaviour
     private float moveSpeed = 1.0f;
     [SerializeField]
     private int lane;
+    [SerializeField]
     private GameObject currentTarget;
 
     private Animator anim;
@@ -50,6 +51,7 @@ public class Attacker : MonoBehaviour
     {
         if (!currentTarget)
         {
+            anim.SetBool("isAttacking", false);
             return;
         }
 
