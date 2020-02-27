@@ -98,6 +98,8 @@ MonoBehaviour:
   projectileSpeed: 3
   rotation: {x: 0, y: 0, z: -10}
   projectileDamage: 50
+  projectileParent: {fileID: 6044058779334614903, guid: 3daa2ebe1790e2f4697860dba1bda109,
+    type: 3}
 --- !u!61 &7630065548225921587
 BoxCollider2D:
   m_ObjectHideFlags: 0

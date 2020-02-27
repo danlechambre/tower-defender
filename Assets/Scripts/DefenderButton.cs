@@ -1,38 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DefenderButton : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject defenderPrefab;
+    Transform buttons;
 
-    private DefenderSpawner defenderSpawner;
-
-    private SpriteRenderer sr;
-    private DefenderButton[] buttons;
+    Image img;
 
     private void Start()
     {
-        defenderSpawner = FindObjectOfType<DefenderSpawner>();
+        img = GetComponent<Image>();
+        buttons = GameObject.Find("Buttons").GetComponent<Transform>();
 
-        sr = GetComponent<SpriteRenderer>();
-        buttons = FindObjectsOfType<DefenderButton>();
-    }
-
-    private void OnMouseDown()
-    {
-        SetButtonActive();
-        defenderSpawner.SetDefenderPrefab(defenderPrefab);
-    }
-
-    private void SetButtonActive()
-    {
-        foreach (DefenderButton b in buttons)
+        foreach (Transform b in buttons)
         {
-            b.sr.color = Color.grey;
+            b.GetComponent<Image>().color = Color.grey;
+        }
+    }
+
+    public void SetActive()
+    {
+        foreach (Transform b in buttons)
+        {
+            b.GetComponent<Image>().color = Color.grey;
         }
 
-        sr.color = Color.white;
+        img.color = Color.white;
     }
 }

@@ -6,21 +6,21 @@ using UnityEngine.UI;
 
 public class Stars : MonoBehaviour
 {
-    private Text starsText;
+    private GameUI ui;
 
     [SerializeField]
     private int currentStars = 100;
 
     private void Start()
     {
-        starsText = GameObject.Find("Stars txt").GetComponent<Text>();
-        if (!starsText)
+        ui = FindObjectOfType<GameUI>();
+        if (!ui)
         {
-            Debug.LogError("Could not find Stars GameObject");
+            Debug.LogError("Could not locate a UI");
         }
         else
         {
-            UpdateStarsUI();
+            ui.UpdateStarsUI(currentStars);
         }
     }
 
@@ -48,13 +48,8 @@ public class Stars : MonoBehaviour
         else
         {
             currentStars -= stars;
-            UpdateStarsUI();
+            ui.UpdateStarsUI(currentStars);
         }
-    }
-
-    private void UpdateStarsUI()
-    {
-        starsText.text = currentStars.ToString();
     }
 
     public int GetCurrentStars()
@@ -65,6 +60,6 @@ public class Stars : MonoBehaviour
     public void AddStars(int stars)
     {
         currentStars += stars;
-        UpdateStarsUI();
+        ui.UpdateStarsUI(currentStars);
     }
 }

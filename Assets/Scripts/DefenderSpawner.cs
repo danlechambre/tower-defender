@@ -7,8 +7,10 @@ public class DefenderSpawner : MonoBehaviour
 {
     private GameObject defenderPrefab;
     private Stars stars;
+
     private bool[,] gridRefOccupied;
     private int rows, columns;
+    private bool spawning = false;
 
     private void Start()
     {
@@ -26,14 +28,17 @@ public class DefenderSpawner : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!defenderPrefab)
+        if (spawning)
         {
-            return;
+            if (!defenderPrefab)
+            {
+                return;
+            }
+
+            Defender defender = defenderPrefab.GetComponent<Defender>();
+
+            AttemptToPlaceDefender(defender);
         }
-        
-        Defender defender = defenderPrefab.GetComponent<Defender>();
-        
-        AttemptToPlaceDefender(defender);
     }
 
     private void AttemptToPlaceDefender(Defender defender)
@@ -82,5 +87,15 @@ public class DefenderSpawner : MonoBehaviour
     public void SetGridRefAsOccupied(int row, int col)
     {
         gridRefOccupied[row, col] = true;
+    }
+
+    public void StartSpawning()
+    {
+        spawning = true;
+    }
+
+    public void StopSpawning()
+    {
+        spawning = false;
     }
 }

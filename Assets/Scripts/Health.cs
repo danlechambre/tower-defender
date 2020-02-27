@@ -6,10 +6,19 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField]
-    private int startingHealth;
-    [SerializeField]
     private GameObject deathVFXprefab;
 
+    [Header("Audio Config")]
+    [SerializeField]
+    private AudioClip deathSFX;
+    [Range(0.0f, 1.0f)]
+    [SerializeField]
+    private float volume;
+
+    [Header("Health Config")]
+    [SerializeField]
+    private int startingHealth;
+    
     private int currentHealth;
     private bool isDead = false;
 
@@ -17,19 +26,18 @@ public class Health : MonoBehaviour
     {
         currentHealth = startingHealth;
     }
-
-    //public bool IsDead()
-    //{
-    //    return isDead;
-    //}
     
-    public bool TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
         if (currentHealth < 1)
         {
             isDead = true;
+            if (GetComponent<Defender>())
+            {
+                GetComponent<Defender>().ReleaseSquare();
+            }
         }
 
         if (isDead)
@@ -37,11 +45,11 @@ public class Health : MonoBehaviour
             DeathSequence();
         }
 
-        return isDead;
     }
 
     private void DeathSequence()
     {
+        AudioSource.PlayClipAtPoint(deathSFX, transform.position, volume);
         Vector2 deathVFXPos = (Vector2)transform.position + GetComponent<BoxCollider2D>().offset;
         GameObject deathVFX = Instantiate(deathVFXprefab, deathVFXPos, Quaternion.identity);
         Destroy(deathVFX, 1.0f);

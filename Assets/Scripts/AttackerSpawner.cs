@@ -7,23 +7,28 @@ public class AttackerSpawner : MonoBehaviour
 {
     [Header("Obj Refs")]
     [SerializeField] 
-    Attacker attackerPrefab;
+    Attacker[] attackerPrefabs;
 
     [Header("Spawn Config")]
     [SerializeField]
-    private float minSpawnDelay = 1.0f;
+    private float levelMinSpawnDelay = 1.0f;
     [SerializeField]
-    private float maxSpawnDelay = 5.0f;
-    [Range (-0.5f, 0.5f)][SerializeField]
-    private float yPadding = 0.0f;
+    private float levelMaxSpawnDelay = 5.0f;
+    [SerializeField]
+    private float minSpawnDelay, maxSpawnDelay;
 
+    IEnumerator spawnAttackers;
 
-
-    bool spawning = true;
-    
-    IEnumerator Start()
+    private void Start()
     {
-        while (spawning)
+        minSpawnDelay = levelMinSpawnDelay;
+        maxSpawnDelay = levelMaxSpawnDelay;
+        spawnAttackers = SpawnAttackers();
+    }
+
+    IEnumerator SpawnAttackers()
+    {
+        while (true)
         {
             float timeBetweenSpawns = UnityEngine.Random.Range(minSpawnDelay, maxSpawnDelay);
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -34,18 +39,34 @@ public class AttackerSpawner : MonoBehaviour
 
     private void SpawnAttacker()
     {
-        float spawnPosY = (float)UnityEngine.Random.Range(1, 6) + yPadding;
+        int attackerIndex = UnityEngine.Random.Range(0, attackerPrefabs.Length);
+
+        float spawnPosY = (float)UnityEngine.Random.Range(1, 6);
         int lane = (int)spawnPosY;
 
         Vector2 spawnPos = new Vector2(transform.position.x, spawnPosY);
-        Attacker newAttacker = Instantiate(attackerPrefab, spawnPos, transform.rotation);
+        Attacker newAttacker = Instantiate(attackerPrefabs[attackerIndex], spawnPos, transform.rotation);
+        
+        Vector3 paddingVector = new Vector3(0, newAttacker.GetYPadding(), 0);
+        newAttacker.transform.position += paddingVector;
+        
         newAttacker.SetLane(lane);
         newAttacker.transform.parent = transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StopSpawning()
     {
-        
+        StopCoroutine(spawnAttackers);
+    }
+
+    public void StartSpawning()
+    {
+        StartCoroutine(spawnAttackers);
+    }
+
+    public void SetDifficulty(float difficultyMultiplier)
+    {
+        minSpawnDelay *= difficultyMultiplier;
+        maxSpawnDelay *= difficultyMultiplier;
     }
 }

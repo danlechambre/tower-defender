@@ -5,17 +5,36 @@ using UnityEngine;
 
 public class Attacker : MonoBehaviour
 {
-    private float moveSpeed = 1.0f;
-    [SerializeField]
-    private int lane;
-    [SerializeField]
+    private LevelController levelController;
     private GameObject currentTarget;
-
+    
     private Animator anim;
+    private AudioSource audioSource;
+
+    [Header("Attacker Config")]
+    [Range(-0.5f, 0.5f)][SerializeField]
+    private float yPadding = 0.0f;
+    [Header("Audio Config")]
+    [SerializeField]
+    private AudioClip attackSFX;
+    [Range(0f, 1.0f)]
+    [SerializeField]
+    private float volume;
+
+    private float moveSpeed = 1.0f;
+    private int lane;
+    
+
+    private void Awake()
+    {
+        levelController = FindObjectOfType<LevelController>();
+        levelController.AttackerSpawned();
+    }
 
     private void Start()
     {
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -51,16 +70,35 @@ public class Attacker : MonoBehaviour
     {
         if (!currentTarget)
         {
-            anim.SetBool("isAttacking", false);
             return;
         }
 
+        audioSource.clip = attackSFX;
+        audioSource.Play();
         Health health = currentTarget.GetComponent<Health>();
-        bool isDead = health.TakeDamage(damage);
-        Debug.Log(isDead);
-        if (isDead)
+        health.TakeDamage(damage);
+
+    }
+
+    public void CheckForTarget()
+    {
+        if (!currentTarget)
         {
             anim.SetBool("isAttacking", false);
         }
+        else
+        {
+            return;
+        }
+    }
+
+    public float GetYPadding()
+    {
+        return yPadding;
+    }
+
+    public void OnDestroy()
+    {
+        levelController.AttackerKilled();
     }
 }

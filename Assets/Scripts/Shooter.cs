@@ -8,21 +8,25 @@ public class Shooter : MonoBehaviour
     [SerializeField] 
     GameObject projectilePrefab;
     [SerializeField]
-    Vector2 projectileOffset;
+    AudioClip projectileSFX;
+    Transform projectileParent;
 
     Animator anim;
-    Vector2 shooterPos;
-    [SerializeField]
-    int lane;
+    AudioSource audio;
 
-    Transform spawner;
+    [SerializeField]
+    Vector2 projectileOffset;
+    
+    Vector2 shooterPos;
+    int lane;
 
     private void Start()
     {
-        spawner = GameObject.Find("Spawner").transform;
-        shooterPos = (Vector2)transform.position + projectileOffset;
-        
         anim = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
+        projectileParent = GameObject.Find("Projectiles").transform;
+
+        shooterPos = (Vector2)transform.position + projectileOffset;
     }
 
     private void Update()
@@ -66,6 +70,10 @@ public class Shooter : MonoBehaviour
     public void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab, shooterPos, Quaternion.identity);
+        projectile.transform.parent = projectileParent;
         projectile.tag = this.tag;
+
+        audio.clip = projectileSFX;
+        audio.Play();
     }
 }

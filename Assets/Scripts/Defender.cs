@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Defender : MonoBehaviour
 {
+    private DefenderSpawner dSpawner;
+
     [Header("Defender Config")]
     [SerializeField]
     private int cost = 10;
     [Range(-0.5f, 0.5f)]
     [SerializeField]
     private float yPadding = 0.0f;
+
     private int rowRef;
     private int colRef;
-    private DefenderSpawner dSpawner;
 
     private void Start()
     {
@@ -42,5 +44,10 @@ public class Defender : MonoBehaviour
     {
         this.rowRef = rowRef;
         this.colRef = colRef;
+    }
+
+    public void ReleaseSquare()
+    {
+        dSpawner.SetGridRefAsFree(rowRef, colRef);
     }
 }

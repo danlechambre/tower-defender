@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [Header("Projectile Config")]
     [Range(1.0f, 10.0f)]
     [SerializeField]
     float projectileSpeed = 5.0f;
@@ -20,7 +21,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag(this.tag))
+        if (collision.CompareTag(this.tag) || collision.tag == "Shredder")
         {
             return;
         }
@@ -29,7 +30,7 @@ public class Projectile : MonoBehaviour
 
         if (!health)
         {
-            Debug.Log("No Health component attached");
+            Debug.LogError("No Health component attached");
         }
         else
         {
