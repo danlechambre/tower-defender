@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DefenderSpawner : MonoBehaviour
 {
-    private GameObject defenderPrefab;
+    private Defender defenderPrefab;
     private Stars stars;
 
     private bool[,] gridRefOccupied;
@@ -69,12 +69,12 @@ public class DefenderSpawner : MonoBehaviour
     {
         float yPadding = defenderPrefab.GetComponent<Defender>().GetYPadding();
         spawnPosition = new Vector2(spawnPosition.x, spawnPosition.y + yPadding);
-        GameObject newDefender = Instantiate(defenderPrefab, spawnPosition, Quaternion.identity);
+        Defender newDefender = Instantiate(defenderPrefab, spawnPosition, Quaternion.identity);
         newDefender.GetComponent<Defender>().SetGridRef(rowRef, colRef);
         newDefender.transform.parent = transform;
     }
 
-    public void SetDefenderPrefab(GameObject defenderPrefab)
+    public void SetDefenderPrefab(Defender defenderPrefab)
     {
         this.defenderPrefab = defenderPrefab;
     }

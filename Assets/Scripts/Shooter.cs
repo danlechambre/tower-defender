@@ -12,7 +12,7 @@ public class Shooter : MonoBehaviour
     Transform projectileParent;
 
     Animator anim;
-    AudioSource audio;
+    AudioSource audiSource;
 
     [SerializeField]
     Vector2 projectileOffset;
@@ -23,7 +23,7 @@ public class Shooter : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
-        audio = GetComponent<AudioSource>();
+        audiSource = GetComponent<AudioSource>();
         projectileParent = GameObject.Find("Projectiles").transform;
 
         shooterPos = (Vector2)transform.position + projectileOffset;
@@ -73,7 +73,7 @@ public class Shooter : MonoBehaviour
         projectile.transform.parent = projectileParent;
         projectile.tag = this.tag;
 
-        audio.clip = projectileSFX;
-        audio.Play();
+        audiSource.clip = projectileSFX;
+        audiSource.Play();
     }
 }
