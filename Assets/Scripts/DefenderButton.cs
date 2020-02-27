@@ -52,4 +52,3 @@ public class DefenderButton : MonoBehaviour
         dSpawner.SetDefenderPrefab(defenderPrefab);
     }
 }
-;
